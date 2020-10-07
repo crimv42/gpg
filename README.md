@@ -1,9 +1,26 @@
-# gpg
-GPG Instructions
-# Generate GPG Key
+# GPG
+GPG key generation Instructions
 
+#### Table of contents
+[GPG Key Creation](#GPG-Key-Generation)
+  - [Create GPG Certificate](#Create-GPG-Certificate)
+  - [Add Signing key](#Add-Signing-key)
+  - [Add Encrpytion key](#Add-Encrpytion-key)
+  - [Add Authentication Key](#Add-Authentication-Key)
+
+[Exporting Keys](#Exporting-Keys)
+  - [Export private key](#Export-private-key)
+  - [Export public key](#Export-public-key)
+
+[Backup and Revocation Keys](#Backup-and-Revocation-Keys)
+  - [Backup GPG Key](#Backup-GPG-Key)
+  - [Generate Revocation Key](#Generate-Revocation-Key)
+
+# GPG Key Generation
+
+## Create GPG Certificate
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg2 --expert --full-generate-key
+[daniel.nelems@vm-fc-work01:~]$ gpg --expert --full-generate-key
 gpg (GnuPG) 2.2.13; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -86,10 +103,10 @@ pub   rsa4096 2019-04-23 [C]
 uid                      bilbo (example key) <bilbo@theshire.com>
 ```
 
-## After generation
+### Confirm Certificate
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg2 -k
+[daniel.nelems@vm-fc-work01:~]$ gpg -k
 /home/daniel.nelems/.gnupg/pubring.kbx
 --------------------------------------
 pub   rsa4096 2019-04-23 [C]
@@ -97,11 +114,10 @@ pub   rsa4096 2019-04-23 [C]
 uid           [ unknown] bilbo (example key) <bilbo@theshire.com>
 ```
 
-# Add keys
 
-## Signing key
+## Add Signing key
 ```
-gpg2 --expert --edit-key bilbo@theshire.com
+gpg --expert --edit-key bilbo@theshire.com
 gpg (GnuPG) 2.2.13; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -172,7 +188,7 @@ ssb  rsa4096/732296B3D40D31FC
 [ unknown] (1). bilbo (example key) <bilbo@theshire.com>
 ```
 
-## Encrpytion key
+## Add Encrpytion key
 
 ```
 gpg> addkey
@@ -236,7 +252,7 @@ ssb  rsa4096/487E7BD5E474E91B
 [ unknown] (1). bilbo (example key) <bilbo@theshire.com>
 ```
 
-## Authentication Key
+## Add Authentication Key
 
 ```
 gpg> addkey
@@ -325,10 +341,10 @@ gpg> q
 Save changes? (y/N) y
 ```
 
-## After adding all keys
+## Key Confirmation
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg2 -k
+[daniel.nelems@vm-fc-work01:~]$ gpg -k
 /home/daniel.nelems/.gnupg/pubring.kbx
 --------------------------------------
 pub   rsa4096 2019-04-23 [C]
@@ -339,14 +355,33 @@ sub   rsa4096 2019-04-23 [E]
 sub   rsa4096 2019-04-23 [A]
 ```
 
-# Export private key
+
+# Exporting Keys
+## Export private key
 
 `gpg -a --export-secret-key bilbo@theshire.com > secret_key`
 
-# Gen revocation key
+## Export Public key
+
+gpg -a --export bilbo@theshire.com > public_key.gpg
+
+
+# Backup and Revocation Keys
+
+# Backup GPG key
+
+Once GPG keys are moved to YubiKey, they cannot be extracted again!
+
+Make sure you have made an encrypted backup before proceeding. Create a thumb drive that is encrypted, and then run copy the contents of:
+
+`~/.gnupg/`
+
+To your encrypted thumb drive.
+
+## Generate Revocation Key
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg2 -a --gen-revoke bilbo@theshire.com > bilbo_revocation_cert.gpg
+[daniel.nelems@vm-fc-work01:~]$ gpg -a --gen-revoke bilbo@theshire.com > bilbo_revocation_cert.gpg
 
 sec  rsa4096/5B11074CBFC83CAB 2019-04-23 bilbo (example key) <bilbo@theshire.com>
 
@@ -373,20 +408,8 @@ your media become unreadable.  But have some caution:  The print system of
 your machine might store the data and make it available to others!
 ```
 
-# Export Public key
-
-gpg -a --export bilbo@theshire.com > public_key.gpg
 
 
-# Backup GPG
-
-Once GPG keys are moved to YubiKey, they cannot be extracted again!
-
-Make sure you have made an encrypted backup before proceeding. Create a thumb drive that is encrypted, and then run copy the contents of:
-
-`~/.gnupg/`
-
-To your encrypted thumb drive.
 
 # GPG Key to Yubikey
 
@@ -395,7 +418,7 @@ Important Transferring keys to YubiKey using keytocard is a destructive, one-way
 Previous GPG versions required the toggle command before selecting keys. The currently selected key(s) are indicated with an \*. When moving keys only one key should be selected at a time.
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg2 --edit-key bilbo@theshire.com
+[daniel.nelems@vm-fc-work01:~]$ gpg --edit-key bilbo@theshire.com
 gpg (GnuPG) 2.2.13; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -497,7 +520,7 @@ gpg> save
 Verify the subkeys have moved to YubiKey as indicated by ssb>:
 
 ```
-$ gpg2 --list-secret-keys
+$ gpg --list-secret-keys
 /home/daniel.nelems/.gnupg/pubring.kbx
 -------------------------------------------------------------------------
 sec   rsa4096 2019-04-23 [C]
