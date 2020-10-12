@@ -65,9 +65,18 @@ Then edit `~/.gnupg/gpg-agent.conf`
 
 # GPG Key Generation
 
+In this section we will go through the process of generating your GPG key.
+
+A GPG key is broken up between a Certificate, and sub-keys(Signing Key, Authentication Key, Encryption Key).
+
+We first generate the certificate, then sign the sub-keys with that certificate.
+
 ## Create GPG Certificate
+
+This section takes you through the process of generating your Certificate
+
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg --expert --full-generate-key
+[crimv42@vm-fc-work01:~]$ gpg --expert --full-generate-key
 gpg (GnuPG) 2.2.13; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -141,8 +150,8 @@ some other action (type on the keyboard, move the mouse, utilize the
 disks) during the prime generation; this gives the random number
 generator a better chance to gain enough entropy.
 gpg: key 5B11074CBFC83CAB marked as ultimately trusted
-gpg: directory '/home/daniel.nelems/.gnupg/openpgp-revocs.d' created
-gpg: revocation certificate stored as '/home/daniel.nelems/.gnupg/openpgp-revocs.d/2A6C6450EF693AED9DB984AB5B11074CBFC83CAB.rev'
+gpg: directory '/home/crimv42/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/home/crimv42/.gnupg/openpgp-revocs.d/2A6C6450EF693AED9DB984AB5B11074CBFC83CAB.rev'
 public and secret key created and signed.
 
 pub   rsa4096 2019-04-23 [C]
@@ -153,8 +162,8 @@ uid                      bilbo (example key) <bilbo@theshire.com>
 ### Confirm Certificate
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg -k
-/home/daniel.nelems/.gnupg/pubring.kbx
+[crimv42@vm-fc-work01:~]$ gpg -k
+/home/crimv42/.gnupg/pubring.kbx
 --------------------------------------
 pub   rsa4096 2019-04-23 [C]
       2A6C6450EF693AED9DB984AB5B11074CBFC83CAB
@@ -163,6 +172,9 @@ uid           [ unknown] bilbo (example key) <bilbo@theshire.com>
 
 
 ## Add Signing key
+
+Here we will add your signing key. This will be generated using the certifcate you created in the first step.
+
 ```
 gpg --expert --edit-key bilbo@theshire.com
 gpg (GnuPG) 2.2.13; Copyright (C) 2019 Free Software Foundation, Inc.
@@ -237,6 +249,8 @@ ssb  rsa4096/732296B3D40D31FC
 
 ## Add Encrpytion key
 
+Here we will add your Encryption key. This will be generated using the certifcate you created in the first step.
+
 ```
 gpg> addkey
 Please select what kind of key you want:
@@ -300,6 +314,8 @@ ssb  rsa4096/487E7BD5E474E91B
 ```
 
 ## Add Authentication Key
+
+Here we will add your Authentication key. This will be generated using the certifcate you created in the first step.
 
 ```
 gpg> addkey
@@ -391,8 +407,8 @@ Save changes? (y/N) y
 ## Key Confirmation
 
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg -k
-/home/daniel.nelems/.gnupg/pubring.kbx
+[crimv42@vm-fc-work01:~]$ gpg -k
+/home/crimv42/.gnupg/pubring.kbx
 --------------------------------------
 pub   rsa4096 2019-04-23 [C]
       2A6C6450EF693AED9DB984AB5B11074CBFC83CAB
@@ -404,14 +420,21 @@ sub   rsa4096 2019-04-23 [A]
 
 
 # Exporting Keys
+
+To use the key you just generated, you need to export it to a format that you can share/backup.
+
 ## Export private key
 
+We will first export your private key. This is *VERY* important to ensure you have a backup in case something happens to your key. This is also a must if you plan to use a Yubikey to store your GPG key.
+ 
 `gpg -a --export-secret-key bilbo@theshire.com > secret_key`
+
 
 ## Export Public key
 
-gpg -a --export bilbo@theshire.com > public_key.gpg
+Your public key is what will be shared to GitHub,GitLab, other developers, and anyone else you want to share secrets you have signed with. You can export you public key easily at anytime using:
 
+`gpg -a --export bilbo@theshire.com > public_key.gpg`
 
 # Backup and Revocation Keys
 
@@ -427,8 +450,10 @@ To your encrypted thumb drive.
 
 ## Generate Revocation Key
 
+A revocation key is a way to state that your key is no longer valid in case of compromise or in case of changing your key.
+
 ```
-[daniel.nelems@vm-fc-work01:~]$ gpg -a --gen-revoke bilbo@theshire.com > bilbo_revocation_cert.gpg
+[crimv42@vm-fc-work01:~]$ gpg -a --gen-revoke bilbo@theshire.com > bilbo_revocation_cert.gpg
 
 sec  rsa4096/5B11074CBFC83CAB 2019-04-23 bilbo (example key) <bilbo@theshire.com>
 
