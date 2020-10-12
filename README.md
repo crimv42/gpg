@@ -2,6 +2,11 @@
 GPG key generation Instructions
 
 #### Table of contents
+[Install](#Install)
+  - [Linux](#Linux-Install)
+  - [macOS](#macOS-Install)
+  - [Windows](#Windows-Install)
+
 [GPG Key Creation](#GPG-Key-Generation)
   - [Create GPG Certificate](#Create-GPG-Certificate)
   - [Add Signing key](#Add-Signing-key)
@@ -18,6 +23,29 @@ GPG key generation Instructions
 
 [Pinentry Install](#Pinentry-install)
   - [Mac OS](#macOS)
+
+# Install
+## Linux Install
+For Debian/Ubuntu and Debian-based distributions
+
+```sudo apt install gnupg```
+
+For RedHat/Fedora and RedHat-based distributions
+
+```sudo yum install gnupg```
+
+
+## macOS Install
+
+Install GNUPG-Tools here:
+
+https://gpgtools.org/
+
+## Windows Install
+
+Install gpg4win here: 
+
+https://gpg4win.org
 
 # GPG Key Generation
 
