@@ -6,6 +6,8 @@ GPG key generation Instructions
   - [Linux](#Linux-Install)
   - [macOS](#macOS-Install)
   - [Windows](#Windows-Install)
+  - [Pinentry Install](#Pinentry-install)
+    - [Mac OS](#macOS)
 
 [GPG Key Creation](#GPG-Key-Generation)
   - [Create GPG Certificate](#Create-GPG-Certificate)
@@ -21,31 +23,45 @@ GPG key generation Instructions
   - [Backup GPG Key](#Backup-GPG-Key)
   - [Generate Revocation Key](#Generate-Revocation-Key)
 
-[Pinentry Install](#Pinentry-install)
-  - [Mac OS](#macOS)
+
+
 
 # Install
-## Linux Install
+### Linux Install
 For Debian/Ubuntu and Debian-based distributions
 
-```sudo apt install gnupg```
+```
+sudo apt install gnupg
+```
 
 For RedHat/Fedora and RedHat-based distributions
 
-```sudo yum install gnupg```
+```
+sudo yum install gnupg
+```
 
-
-## macOS Install
+### macOS Install
 
 Install GNUPG-Tools here:
 
 https://gpgtools.org/
 
-## Windows Install
+### Windows Install
 
-Install gpg4win here: 
+Install gpg4win here:
 
 https://gpg4win.org
+
+## Pinentry install
+
+#### MacOS
+
+`brew install pinentry-mac`
+
+Then edit `~/.gnupg/gpg-agent.conf`
+```
+/usr/bin/pinentry-mac
+```
 
 # GPG Key Generation
 
@@ -437,15 +453,4 @@ access to this certificate he can use it to make your key unusable.
 It is smart to print this certificate and store it away, just in case
 your media become unreadable.  But have some caution:  The print system of
 your machine might store the data and make it available to others!
-```
-
-# Pinentry install
-
-#### MacOS
-
-`brew install pinentry-mac`
-
-Then edit `~/.gnupg/gpg-agent.conf`
-```
-/usr/bin/pinentry-mac
 ```
